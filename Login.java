@@ -145,6 +145,10 @@ public class Login
         LoginFocusListener lfl = new LoginFocusListener();
         nameInput.addFocusListener(lfl);
         password.addFocusListener(lfl);
+        //键盘适配器
+        LoginKeyAdapter lka = new LoginKeyAdapter();
+        nameInput.addKeyListener(lka);
+        password.addKeyListener(lka);
     }
     
     /* 内部类监听器 */
@@ -158,7 +162,7 @@ public class Login
             String name0 = nameInput.getText();
             //String password0 = password.getText(); //使用或覆盖了已过时的 API。
             String password0 = String.valueOf(password.getPassword());
-            if(ob == loginBtn)
+            if(ob == loginBtn) //登录
             {
                 //从数据库中读取账号密码数据，存入哈希表中
                 set_name_password();               
@@ -177,7 +181,6 @@ public class Login
                         if(password0.equals(passwordc))
                         {
                             flag = false;
-                            JOptionPane.showMessageDialog(loginFrame, "登录成功");
                             break;
                         }
                     }
@@ -186,34 +189,43 @@ public class Login
                 {
                     JOptionPane.showMessageDialog(loginFrame, "用户名或密码不正确");    
                 }
-                else if(choose1.isSelected()) //登陆成功并且勾选了“记住密码”
+                else 
                 {
-                    System.out.println("记住密码");
-                    try
+                    if(choose1.isSelected()) //登陆成功并且勾选了“记住密码”
                     {
-                        //以只写的方式打开文件
-                        RandomAccessFile raf = new RandomAccessFile("iniTXT/remember.password", "rw");
-                        //获得文件长度，字节数
-                        long fileLength = raf.length();
-                        //将写文件指针移到文件尾。
-                        raf.seek(fileLength);
-                        //写入文件
-                        raf.writeBytes(password0);
-                        raf.writeBytes("@");
-                        raf.writeBytes(name0);
-                        raf.writeBytes("\r\n");
-                        raf.close();
+                        System.out.println("记住密码");
+                        try
+                        {
+                            //以只写的方式打开文件
+                            RandomAccessFile raf = new RandomAccessFile("iniTXT/remember.password", "rw");
+                            //获得文件长度，字节数
+                            long fileLength = raf.length();
+                            //将写文件指针移到文件尾。
+                            raf.seek(fileLength);
+                            //写入文件
+                            raf.writeBytes(password0);
+                            raf.writeBytes("@");
+                            raf.writeBytes(name0);
+                            raf.writeBytes("\r\n");
+                            raf.close();
+                        }
+                        catch(Exception ee)
+                        {
+                            System.out.println("文件不存在");
+                        }
                     }
-                    catch(Exception ee)
-                    {
-                        System.out.println("文件不存在");
-                    }
+                    
+                    JOptionPane.showMessageDialog(loginFrame, "登录成功");
+                    new Map();
+                    loginFrame.dispose(); //销毁窗口
                 }
                 //清空文本框
                 nameInput.setText("");
                 password.setText("");
+                
+                
             }
-            else if(ob == loginBtn1)
+            else if(ob == loginBtn1) //注册账号
             {
                 int ln = name0.length();
                 int lp = password0.length();
@@ -221,7 +233,7 @@ public class Login
                 //判断用户名密码长度
                 if(ln<1 || ln>10 || lp<6 || lp>24)
                 {
-                    JOptionPane.showMessageDialog(loginFrame, "用户名长度不符合要求！");
+                    JOptionPane.showMessageDialog(loginFrame, "用户名或密码长度不符合要求！");
                 }
                 else
                 {
@@ -248,6 +260,9 @@ public class Login
                     //将账号与密码放入哈希表中
                     name_password.put(name0, password0);
                     JOptionPane.showMessageDialog(loginFrame, "注册成功");
+                    new Register(); //调用个人信息调查窗口
+                    //System.out.println(name0);
+                    //System.out.println(password0);
                 }
                 //清空文本框
                 nameInput.setText("");
@@ -257,6 +272,41 @@ public class Login
             {
                 System.out.println("忘记密码");
             }
+        }
+    } 
+    //键盘适配器
+    class LoginKeyAdapter extends KeyAdapter
+    {
+        // 键入某个键时调用此方法
+        public void keyTyped(KeyEvent e) 
+        {
+            Object ob = e.getSource();
+            if(ob == nameInput)
+            {
+                // 如果键入的字符是0~9，或者按键是Del键或Backspace键，则
+                // 直接返回读入的键盘字符，否则，设置键入的字符为键位未知（0）
+                if (((e.getKeyChar() <= 0x39) && (e.getKeyChar() >= 0x30))|| (e.getKeyChar() == 127) || (e.getKeyChar() == 8)) 
+                {
+                    e.setKeyChar(e.getKeyChar());
+                } 
+                else 
+                {
+                    e.setKeyChar((char) 0);
+                }
+            }
+            else if(ob == password)
+            {
+                // 如果键入的字符是a~z,A~Z,0~9，或者按键是Del键或Backspace键，则
+                // 直接返回读入的键盘字符，否则，设置键入的字符为键位未知（0）
+                if(((e.getKeyChar() <= 0x7A) && (e.getKeyChar() >= 0x61)) || ((e.getKeyChar() <= 0x5A) && (e.getKeyChar() >= 0x41)) || ((e.getKeyChar() <= 0x39) && (e.getKeyChar() >= 0x30)) || (e.getKeyChar() == 127) || (e.getKeyChar() == 8))
+                {
+                    e.setKeyChar(e.getKeyChar());
+                } 
+                else 
+                {
+                    e.setKeyChar((char) 0);
+                }
+            }                
         }
     }
     //鼠标监听器
@@ -309,7 +359,7 @@ public class Login
             }
             else if(ob == password)
             {
-                infoJTextField.setText("密码由6~24位数字或字母组成。");
+                infoJTextField.setText("密码由6~24位数字或大小写字母组成。");
             }
         }
         //失去焦点
@@ -322,11 +372,6 @@ public class Login
     void set_name_password()
     {
         
-    }
-    
-    public static void main(String[] ags)
-    {
-        Login ui = new Login();
     }
 }
 
