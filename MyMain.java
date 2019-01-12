@@ -2,7 +2,7 @@
 {
 	public static void main(String[] args)
 	{
-        //new Login();
-        new Map();
+        new Login();
+        //new Map();
 	}
 }
