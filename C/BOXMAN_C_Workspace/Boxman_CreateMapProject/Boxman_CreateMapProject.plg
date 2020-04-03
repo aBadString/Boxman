@@ -1,0 +1,32 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Boxman_CreateMapProject - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\Users\song\AppData\Local\Temp\RSP84E4.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/Boxman_CreateMapProject.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"D:\Visual C++\BOXMAN\BOXMAN_C_Workspace\Boxman_CreateMapProject\create_map.c"
+]
+Creating command line "cl.exe @C:\Users\song\AppData\Local\Temp\RSP84E4.tmp" 
+Creating temporary file "C:\Users\song\AppData\Local\Temp\RSP84E5.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/Boxman_CreateMapProject.pdb" /debug /machine:I386 /out:"Debug/Boxman_CreateMapProject.exe" /pdbtype:sept 
+".\Debug\create_map.obj"
+]
+Creating command line "link.exe @C:\Users\song\AppData\Local\Temp\RSP84E5.tmp"
+<h3>Output Window</h3>
+Compiling...
+create_map.c
+Linking...
+
+
+
+<h3>Results</h3>
+Boxman_CreateMapProject.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
